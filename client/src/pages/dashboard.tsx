@@ -107,19 +107,19 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header Navigation */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <header className="bg-teal-header text-white border-b border-teal-600 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <ChartLineIcon className="text-primary-600 text-2xl" size={32} />
-              <h1 className="text-xl font-semibold text-slate-800">Portfolio Dashboard</h1>
+              <ChartLineIcon className="text-white text-2xl" size={32} />
+              <h1 className="text-xl font-semibold text-white">Portfolio Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm text-slate-600">
+              <div className="flex items-center space-x-2 text-sm text-white">
                 <UserCircleIcon className="text-lg" size={20} />
                 <span data-testid="user-name">{userLoading ? "Loading..." : user?.name || "User"}</span>
               </div>
-              <Button variant="ghost" size="sm" data-testid="button-settings">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/10" data-testid="button-settings">
                 <SettingsIcon size={16} />
               </Button>
             </div>
@@ -323,6 +323,7 @@ export default function Dashboard() {
                     </Button>
                     <Button 
                       onClick={() => setLocation("/suitability-monitor")}
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
                       data-testid="button-suitability-monitor"
                     >
                       <BarChart3Icon className="mr-2" size={16} />
