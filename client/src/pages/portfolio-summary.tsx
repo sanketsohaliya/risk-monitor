@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeftIcon, AlertTriangleIcon, CheckCircleIcon, XCircleIcon, ClockIcon, FilterIcon } from "lucide-react";
+import { ArrowLeftIcon, AlertTriangleIcon, CheckCircleIcon, XCircleIcon, ClockIcon, FilterIcon, ExternalLinkIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -53,6 +53,23 @@ export default function PortfolioSummary() {
 
   const handleStatusChange = (breachId: string, newStatus: string) => {
     updateBreachMutation.mutate({ id: breachId, status: newStatus });
+    
+    // If "Accept and change" is selected, redirect to client portfolio
+    if (newStatus === "Accept and change") {
+      // Show a confirmation toast before redirecting
+      toast({
+        title: "Redirecting to Client Portfolio",
+        description: "Taking you to the external portfolio management system to make changes.",
+      });
+      
+      // Delay the redirect slightly to show the toast
+      setTimeout(() => {
+        window.open(
+          "https://auth.fefundinfo.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dfefundinfo-advisery-feanalytics-prod%26redirect_uri%3Dhttps%253A%252F%252Fwww.feanalytics.com%252FAuthorise.aspx%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520FEAnalytics%2520analytics-chartsapi-role-read%2520analytics-api-role-read%2520search-api-read%2520nextgen-api-read%2520decumulation-api-role-read%26state%3DOpenIdConnect.AuthenticationProperties%253DWml1j6ByEYk2B3ocABAhX_lvNywKBurdC1eqtTAYkkc1EronoFFk9Bw_1GlLB7ftSrSMTjfN7H7XI5sJqNOdQufo5rW5DhS-fzrz4oSPHA7jO3XEMGtKK7VvlFfWnYw4Ahqsv1t_x-Iy3v-pWf6VguUcLQX7t4jzToZYkNYsaSt29eo_vDR8ZUNlxxoHcJvnyYo1skhcaAl-aNpT9r_41YmzIEjip1V2CyCS10lgxoz1DPjQVp9GgQ_3oFfXxvqg%26response_mode%3Dform_post%26nonce%3D638917783774170459.MTkwMzgzZDgtNGI5My00OTYyLWEwMGYtNzZjZGRjMzA4M2Q3YzYwMGMxYWQtMGM1YS00YjAxLWExNzQtOGEzZTk3NjJmNTEw%26x-client-SKU%3DID_NET461%26x-client-ver%3D5.3.0.0",
+          "_blank"
+        );
+      }, 1500);
+    }
   };
 
   const getPortfolioName = (portfolioId: string): string => {
@@ -257,8 +274,8 @@ export default function PortfolioSummary() {
                         </Badge>
                       </div>
                       
-                      {/* Action Dropdown */}
-                      <div className="flex justify-end">
+                      {/* Action Dropdown and Redirect Button */}
+                      <div className="flex flex-col space-y-2">
                         <Select
                           value={breach.status}
                           onValueChange={(value) => handleStatusChange(breach.id, value)}
@@ -269,11 +286,38 @@ export default function PortfolioSummary() {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="Pending">Pending Review</SelectItem>
-                            <SelectItem value="Accept and change">Accept and Change</SelectItem>
+                            <SelectItem value="Accept and change">
+                              <div className="flex items-center">
+                                <span>Accept and Change</span>
+                                <ExternalLinkIcon className="ml-2" size={12} />
+                              </div>
+                            </SelectItem>
                             <SelectItem value="Accept without change">Accept Without Change</SelectItem>
                             <SelectItem value="Reject">Reject</SelectItem>
                           </SelectContent>
                         </Select>
+                        
+                        {breach.status === "Accept and change" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-48 text-blue-600 border-blue-200 hover:bg-blue-50"
+                            onClick={() => {
+                              toast({
+                                title: "Opening Client Portfolio",
+                                description: "Redirecting to external portfolio system.",
+                              });
+                              window.open(
+                                "https://auth.fefundinfo.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dfefundinfo-advisery-feanalytics-prod%26redirect_uri%3Dhttps%253A%252F%252Fwww.feanalytics.com%252FAuthorise.aspx%26response_type%3Dcode%2520id_token%26scope%3Dopenid%2520profile%2520FEAnalytics%2520analytics-chartsapi-role-read%2520analytics-api-role-read%2520search-api-read%2520nextgen-api-read%2520decumulation-api-role-read%26state%3DOpenIdConnect.AuthenticationProperties%253DWml1j6ByEYk2B3ocABAhX_lvNywKBurdC1eqtTAYkkc1EronoFFk9Bw_1GlLB7ftSrSMTjfN7H7XI5sJqNOdQufo5rW5DhS-fzrz4oSPHA7jO3XEMGtKK7VvlFfWnYw4Ahqsv1t_x-Iy3v-pWf6VguUcLQX7t4jzToZYkNYsaSt29eo_vDR8ZUNlxxoHcJvnyYo1skhcaAl-aNpT9r_41YmzIEjip1V2CyCS10lgxoz1DPjQVp9GgQ_3oFfXxvqg%26response_mode%3Dform_post%26nonce%3D638917783774170459.MTkwMzgzZDgtNGI5My00OTYyLWEwMGYtNzZjZGRjMzA4M2Q3YzYwMGMxYWQtMGM1YS00YjAxLWExNzQtOGEzZTk3NjJmNTEw%26x-client-SKU%3DID_NET461%26x-client-ver%3D5.3.0.0",
+                                "_blank"
+                              );
+                            }}
+                            data-testid={`button-redirect-${breach.id}`}
+                          >
+                            <ExternalLinkIcon className="mr-2" size={14} />
+                            Open Client Portfolio
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
