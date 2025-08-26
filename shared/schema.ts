@@ -62,6 +62,17 @@ export const monitoringFields = pgTable("monitoring_fields", {
   alertLevel: text("alert_level").notNull(),
 });
 
+export const portfolioBreaches = pgTable("portfolio_breaches", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  portfolioId: varchar("portfolio_id").notNull(),
+  monitoringFieldId: varchar("monitoring_field_id").notNull(),
+  breachCondition: text("breach_condition").notNull(),
+  breachValue: decimal("breach_value", { precision: 10, scale: 2 }).notNull(),
+  status: text("status").notNull().default("Pending"), // "Accept and change", "Accept without change", "Reject", "Pending"
+  detectedAt: timestamp("detected_at").defaultNow(),
+  resolvedAt: timestamp("resolved_at"),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -90,6 +101,12 @@ export const insertMonitoringFieldSchema = createInsertSchema(monitoringFields).
   id: true,
 });
 
+export const insertPortfolioBreachSchema = createInsertSchema(portfolioBreaches).omit({
+  id: true,
+  detectedAt: true,
+  resolvedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Portfolio = typeof portfolios.$inferSelect;
@@ -102,3 +119,5 @@ export type SuitabilityRule = typeof suitabilityRules.$inferSelect;
 export type InsertSuitabilityRule = z.infer<typeof insertSuitabilityRuleSchema>;
 export type MonitoringField = typeof monitoringFields.$inferSelect;
 export type InsertMonitoringField = z.infer<typeof insertMonitoringFieldSchema>;
+export type PortfolioBreach = typeof portfolioBreaches.$inferSelect;
+export type InsertPortfolioBreach = z.infer<typeof insertPortfolioBreachSchema>;

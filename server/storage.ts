@@ -10,7 +10,9 @@ import {
   type SuitabilityRule,
   type InsertSuitabilityRule,
   type MonitoringField,
-  type InsertMonitoringField
+  type InsertMonitoringField,
+  type PortfolioBreach,
+  type InsertPortfolioBreach
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
@@ -48,6 +50,12 @@ export interface IStorage {
   createMonitoringField(field: InsertMonitoringField): Promise<MonitoringField>;
   updateMonitoringField(id: string, updates: Partial<InsertMonitoringField>): Promise<MonitoringField | undefined>;
   deleteMonitoringField(id: string): Promise<boolean>;
+  
+  // Portfolio Breach methods
+  getPortfolioBreachesByUserId(userId: string): Promise<PortfolioBreach[]>;
+  createPortfolioBreach(breach: InsertPortfolioBreach): Promise<PortfolioBreach>;
+  updatePortfolioBreach(id: string, updates: Partial<InsertPortfolioBreach>): Promise<PortfolioBreach | undefined>;
+  deletePortfolioBreach(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -57,6 +65,7 @@ export class MemStorage implements IStorage {
   private atrqResults: Map<string, AtrqResult>;
   private suitabilityRules: Map<string, SuitabilityRule>;
   private monitoringFields: Map<string, MonitoringField>;
+  private portfolioBreaches: Map<string, PortfolioBreach>;
 
   constructor() {
     this.users = new Map();
@@ -65,6 +74,7 @@ export class MemStorage implements IStorage {
     this.atrqResults = new Map();
     this.suitabilityRules = new Map();
     this.monitoringFields = new Map();
+    this.portfolioBreaches = new Map();
     
     // Initialize with sample data
     this.initializeSampleData();
@@ -205,6 +215,44 @@ export class MemStorage implements IStorage {
 
     rules.forEach(rule => {
       this.suitabilityRules.set(rule.id, rule);
+    });
+
+    // Create sample portfolio breaches
+    const breaches = [
+      {
+        id: randomUUID(),
+        portfolioId: portfolios[0].id, // Conservative Growth Fund
+        monitoringFieldId: fields[0].id, // Portfolio Allocation Drift
+        breachCondition: "Portfolio Allocation Drift > 5.0%",
+        breachValue: "7.2",
+        status: "Pending",
+        detectedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+        resolvedAt: null
+      },
+      {
+        id: randomUUID(),
+        portfolioId: portfolios[1].id, // Aggressive Growth Portfolio
+        monitoringFieldId: fields[1].id, // Risk Profile Mismatch
+        breachCondition: "Risk Score Mismatch > 1.5",
+        breachValue: "2.1",
+        status: "Accept and change",
+        detectedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+        resolvedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+      },
+      {
+        id: randomUUID(),
+        portfolioId: portfolios[2].id, // Balanced Income Fund
+        monitoringFieldId: fields[2].id, // Concentration Risk
+        breachCondition: "Concentration Risk > 20.0%",
+        breachValue: "25.8",
+        status: "Reject",
+        detectedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+        resolvedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+      }
+    ];
+
+    breaches.forEach(breach => {
+      this.portfolioBreaches.set(breach.id, breach);
     });
   }
 
@@ -374,6 +422,47 @@ export class MemStorage implements IStorage {
 
   async deleteMonitoringField(id: string): Promise<boolean> {
     return this.monitoringFields.delete(id);
+  }
+
+  async getPortfolioBreachesByUserId(userId: string): Promise<PortfolioBreach[]> {
+    // Get user's portfolios first
+    const userPortfolios = Array.from(this.portfolios.values()).filter(
+      portfolio => portfolio.userId === userId
+    );
+    const portfolioIds = userPortfolios.map(p => p.id);
+    
+    return Array.from(this.portfolioBreaches.values()).filter(
+      breach => portfolioIds.includes(breach.portfolioId)
+    );
+  }
+
+  async createPortfolioBreach(breach: InsertPortfolioBreach): Promise<PortfolioBreach> {
+    const id = randomUUID();
+    const newBreach: PortfolioBreach = {
+      ...breach,
+      id,
+      detectedAt: new Date(),
+      resolvedAt: null
+    };
+    this.portfolioBreaches.set(id, newBreach);
+    return newBreach;
+  }
+
+  async updatePortfolioBreach(id: string, updates: Partial<InsertPortfolioBreach>): Promise<PortfolioBreach | undefined> {
+    const breach = this.portfolioBreaches.get(id);
+    if (!breach) return undefined;
+    
+    const updated: PortfolioBreach = {
+      ...breach,
+      ...updates,
+      resolvedAt: updates.status && updates.status !== "Pending" ? new Date() : breach.resolvedAt
+    };
+    this.portfolioBreaches.set(id, updated);
+    return updated;
+  }
+
+  async deletePortfolioBreach(id: string): Promise<boolean> {
+    return this.portfolioBreaches.delete(id);
   }
 }
 

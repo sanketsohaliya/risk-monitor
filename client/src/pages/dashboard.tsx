@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { ChartLineIcon, UserCircleIcon, SettingsIcon, FolderSync, ArrowUpIcon, Target, CoinsIcon, ShieldCheckIcon, ShieldQuestion, EyeIcon, EditIcon, SearchIcon, BarChart3Icon } from "lucide-react";
+import { ChartLineIcon, UserCircleIcon, SettingsIcon, FolderSync, ArrowUpIcon, Target, CoinsIcon, ShieldCheckIcon, ShieldQuestion, EyeIcon, EditIcon, SearchIcon, BarChart3Icon, FileTextIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -297,6 +297,14 @@ export default function Dashboard() {
                         data-testid="input-search-portfolios"
                       />
                     </div>
+                    <Button 
+                      onClick={() => setLocation("/portfolio-summary")}
+                      variant="outline"
+                      data-testid="button-portfolio-summary"
+                    >
+                      <FileTextIcon className="mr-2" size={16} />
+                      Portfolio Summary
+                    </Button>
                     <Button 
                       onClick={() => setLocation("/suitability-monitor")}
                       data-testid="button-suitability-monitor"

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertPortfolioSchema, insertSuitabilityRuleSchema, insertMonitoringFieldSchema } from "@shared/schema";
+import { insertPortfolioSchema, insertSuitabilityRuleSchema, insertMonitoringFieldSchema, insertPortfolioBreachSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get current user (hardcoded for demo)
@@ -174,6 +174,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Field deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete field" });
+    }
+  });
+
+  // Portfolio Breaches routes
+  app.get("/api/portfolio-breaches", async (req, res) => {
+    try {
+      const users = Array.from((storage as any).users.values());
+      const userId = users[0]?.id;
+      if (!userId) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const breaches = await storage.getPortfolioBreachesByUserId(userId);
+      res.json(breaches);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get portfolio breaches" });
+    }
+  });
+
+  app.post("/api/portfolio-breaches", async (req, res) => {
+    try {
+      const validatedData = insertPortfolioBreachSchema.parse(req.body);
+      const breach = await storage.createPortfolioBreach(validatedData);
+      res.json(breach);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid breach data" });
+    }
+  });
+
+  app.put("/api/portfolio-breaches/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updates = req.body;
+      const breach = await storage.updatePortfolioBreach(id, updates);
+      if (!breach) {
+        return res.status(404).json({ message: "Breach not found" });
+      }
+      res.json(breach);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update breach" });
+    }
+  });
+
+  app.delete("/api/portfolio-breaches/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const success = await storage.deletePortfolioBreach(id);
+      if (!success) {
+        return res.status(404).json({ message: "Breach not found" });
+      }
+      res.json({ message: "Breach deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete breach" });
     }
   });
 

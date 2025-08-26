@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/pages/dashboard";
 import SuitabilityMonitor from "@/pages/suitability-monitor";
+import PortfolioSummary from "@/pages/portfolio-summary";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -12,6 +13,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Dashboard} />
       <Route path="/suitability-monitor" component={SuitabilityMonitor} />
+      <Route path="/portfolio-summary" component={PortfolioSummary} />
       <Route component={NotFound} />
     </Switch>
   );
