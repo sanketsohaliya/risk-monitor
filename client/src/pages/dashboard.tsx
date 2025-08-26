@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { ChartLineIcon, UserCircleIcon, SettingsIcon, FolderSync, ArrowUpIcon, Target, CoinsIcon, ShieldCheckIcon, ShieldQuestion, EyeIcon, EditIcon, SearchIcon, BarChart3Icon, FileTextIcon } from "lucide-react";
+import { ChartLineIcon, UserCircleIcon, SettingsIcon, FolderSync, ArrowUpIcon, Target, CoinsIcon, ShieldCheckIcon, ShieldQuestion, EyeIcon, EditIcon, SearchIcon, BarChart3Icon, FileTextIcon, BrainIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,8 +47,14 @@ export default function Dashboard() {
   const handleSelectPortfolio = (portfolioId: string, checked: boolean) => {
     if (checked) {
       setSelectedPortfolios(prev => [...prev, portfolioId]);
+      // Store selected portfolio for AI Summary
+      localStorage.setItem('selectedPortfolioId', portfolioId);
     } else {
       setSelectedPortfolios(prev => prev.filter(id => id !== portfolioId));
+      // Clear selected portfolio if all are deselected
+      if (selectedPortfolios.length === 1 && selectedPortfolios.includes(portfolioId)) {
+        localStorage.removeItem('selectedPortfolioId');
+      }
     }
   };
 
@@ -304,6 +310,16 @@ export default function Dashboard() {
                     >
                       <FileTextIcon className="mr-2" size={16} />
                       Portfolio Summary
+                    </Button>
+                    <Button 
+                      onClick={() => setLocation("/ai-summary")}
+                      variant="outline"
+                      disabled={selectedPortfolios.length === 0}
+                      className={selectedPortfolios.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
+                      data-testid="button-ai-summary"
+                    >
+                      <BrainIcon className="mr-2" size={16} />
+                      AI Summary
                     </Button>
                     <Button 
                       onClick={() => setLocation("/suitability-monitor")}

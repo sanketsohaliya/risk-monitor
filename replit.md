@@ -1,6 +1,6 @@
 # Overview
 
-This is a financial portfolio management web application built with a modern full-stack architecture. The application provides portfolio tracking, goal management, risk assessment via ATRQ (Attitude to Risk Questionnaire), and suitability monitoring features. It's designed for financial advisors and clients to manage investment portfolios and monitor compliance with suitability rules.
+This is a financial portfolio management web application built with a modern full-stack architecture. The application provides portfolio tracking, goal management, risk assessment via ATRQ (Attitude to Risk Questionnaire), suitability monitoring features, and AI-powered portfolio analysis. It's designed for financial advisors and clients to manage investment portfolios, monitor compliance with suitability rules, and generate comprehensive AI-driven portfolio reports.
 
 # User Preferences
 
@@ -31,6 +31,7 @@ The API provides endpoints for:
 - ATRQ results management
 - Suitability rules configuration
 - Monitoring field management
+- AI-powered portfolio analysis and report generation
 
 ## Data Storage
 The application uses **PostgreSQL** as the primary database with **Drizzle ORM** for type-safe database operations. The database schema is defined in `shared/schema.ts` using Drizzle's schema definition API with **Zod** for validation.

@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertPortfolioSchema, insertSuitabilityRuleSchema, insertMonitoringFieldSchema, insertPortfolioBreachSchema } from "@shared/schema";
+import { generatePortfolioAnalysis } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get current user (hardcoded for demo)
@@ -226,6 +227,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Breach deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete breach" });
+    }
+  });
+
+  // AI Summary route
+  app.post("/api/ai-summary", async (req, res) => {
+    try {
+      const { portfolioId } = req.body;
+      
+      if (!portfolioId) {
+        return res.status(400).json({ message: "Portfolio ID is required" });
+      }
+
+      // Get portfolio data
+      const users = Array.from((storage as any).users.values());
+      const userId = users[0]?.id;
+      if (!userId) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const portfolios = await storage.getPortfoliosByUserId(userId);
+      const portfolio = portfolios.find((p: any) => p.id === portfolioId);
+      if (!portfolio) {
+        return res.status(404).json({ message: "Portfolio not found" });
+      }
+
+      // Get breach data
+      const breaches = await storage.getPortfolioBreachesByUserId(userId);
+      
+      // Get ATRQ data
+      const atrqData = await storage.getAtrqResultByUserId(userId);
+
+      // Generate AI analysis
+      const analysis = await generatePortfolioAnalysis({
+        portfolio,
+        breaches,
+        atrqData
+      });
+
+      res.json(analysis);
+    } catch (error) {
+      console.error("AI Summary error:", error);
+      res.status(500).json({ message: "Failed to generate AI summary" });
     }
   });
 
