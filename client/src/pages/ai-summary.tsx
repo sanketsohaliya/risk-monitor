@@ -56,10 +56,19 @@ export default function AISummary() {
   // AI Summary generation mutation
   const generateSummaryMutation = useMutation({
     mutationFn: async (portfolioId: string) => {
-      return apiRequest(`/api/ai-summary`, {
-        method: "POST",
-        body: { portfolioId },
+      const response = await fetch('/api/ai-summary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ portfolioId }),
       });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate AI summary');
+      }
+      
+      return response.json();
     },
     onSuccess: (data) => {
       const report = {
