@@ -1,0 +1,654 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard - Portfolio Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 font-sans">
+    <!-- @COMPONENT: DashboardLayout -->
+    <div class="min-h-screen">
+        <!-- Header Navigation -->
+        <!-- @COMPONENT: HeaderNav -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-chart-line text-primary-600 text-2xl"></i>
+                        <h1 class="text-xl font-semibold text-slate-800">Portfolio Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 text-sm text-slate-600">
+                            <i class="fas fa-user-circle text-lg"></i>
+                            <span data-bind="user.name">John Smith</span>
+                        </div>
+                        <button class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- @END_COMPONENT: HeaderNav -->
+
+        <!-- Main Dashboard Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- @STATE: currentView:string = 'dashboard' -->
+            <div id="dashboardView">
+                <!-- Goal Section -->
+                <!-- @COMPONENT: GoalSection -->
+                <section class="mb-8">
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-semibold text-slate-800">Goals Overview</h2>
+                            <button class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                <i class="fas fa-sync-alt mr-1"></i>
+                                Refresh Data
+                            </button>
+                        </div>
+                        
+                        <!-- Goal Metrics Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <!-- @MAP: goalMetrics.map(metric => ( -->
+                            <div class="bg-gradient-to-r from-primary-50 to-blue-50 rounded-lg p-4 border border-primary-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-medium text-slate-600" data-bind="metric.label">Total Assets</h3>
+                                    <i class="fas fa-arrow-up text-emerald-500 text-sm"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-slate-800" data-bind="metric.value" data-mock="true">$2,450,000</div>
+                                <div class="text-sm text-emerald-600 mt-1" data-bind="metric.change" data-mock="true">+12.5% YTD</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-emerald-50 to-green-50 rounded-lg p-4 border border-emerald-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-medium text-slate-600" data-mock="true">Target Progress</h3>
+                                    <i class="fas fa-bullseye text-emerald-500 text-sm"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-slate-800" data-mock="true">87.3%</div>
+                                <div class="text-sm text-emerald-600 mt-1" data-mock="true">On Track</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg p-4 border border-amber-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-medium text-slate-600" data-mock="true">Monthly Income</h3>
+                                    <i class="fas fa-coins text-amber-500 text-sm"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-slate-800" data-mock="true">$18,750</div>
+                                <div class="text-sm text-amber-600 mt-1" data-mock="true">+3.2% vs last month</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg p-4 border border-slate-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-medium text-slate-600" data-mock="true">Risk Score</h3>
+                                    <i class="fas fa-shield-alt text-slate-500 text-sm"></i>
+                                </div>
+                                <div class="text-2xl font-bold text-slate-800" data-mock="true">6.8/10</div>
+                                <div class="text-sm text-slate-600 mt-1" data-mock="true">Moderate Risk</div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </section>
+                <!-- @END_COMPONENT: GoalSection -->
+
+                <!-- ATRQ Section -->
+                <!-- @COMPONENT: ATRQSection -->
+                <section class="mb-8">
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                        <h2 class="text-2xl font-semibold text-slate-800 mb-6">Attitude to Risk Questionnaire (ATRQ)</h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Risk Profile Card -->
+                            <div class="bg-gradient-to-br from-primary-600 to-primary-700 rounded-lg p-6 text-white">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-semibold">Current Risk Profile</h3>
+                                    <i class="fas fa-user-shield text-2xl opacity-80"></i>
+                                </div>
+                                <div class="text-3xl font-bold mb-2" data-mock="true">Moderate</div>
+                                <div class="text-primary-100 text-sm" data-mock="true">Score: 6.8/10</div>
+                                <div class="text-primary-100 text-sm" data-mock="true">Last Updated: March 15, 2024</div>
+                            </div>
+                            
+                            <!-- Risk Tolerance Breakdown -->
+                            <div class="lg:col-span-2">
+                                <h4 class="text-lg font-semibold text-slate-800 mb-4">Risk Tolerance Breakdown</h4>
+                                <div class="space-y-4">
+                                    <!-- @MAP: riskCategories.map(category => ( -->
+                                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-primary-500 rounded-full" data-mock="true"></div>
+                                            <span class="font-medium text-slate-700" data-mock="true">Time Horizon</span>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="text-sm text-slate-600" data-mock="true">8.2/10</div>
+                                            <div class="w-24 bg-slate-200 rounded-full h-2">
+                                                <div class="bg-primary-500 h-2 rounded-full" style="width: 82%" data-mock="true"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-emerald-500 rounded-full" data-mock="true"></div>
+                                            <span class="font-medium text-slate-700" data-mock="true">Financial Capacity</span>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="text-sm text-slate-600" data-mock="true">7.1/10</div>
+                                            <div class="w-24 bg-slate-200 rounded-full h-2">
+                                                <div class="bg-emerald-500 h-2 rounded-full" style="width: 71%" data-mock="true"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-amber-500 rounded-full" data-mock="true"></div>
+                                            <span class="font-medium text-slate-700" data-mock="true">Loss Tolerance</span>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="text-sm text-slate-600" data-mock="true">5.9/10</div>
+                                            <div class="w-24 bg-slate-200 rounded-full h-2">
+                                                <div class="bg-amber-500 h-2 rounded-full" style="width: 59%" data-mock="true"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-3 h-3 bg-red-500 rounded-full" data-mock="true"></div>
+                                            <span class="font-medium text-slate-700" data-mock="true">Risk Experience</span>
+                                        </div>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="text-sm text-slate-600" data-mock="true">6.3/10</div>
+                                            <div class="w-24 bg-slate-200 rounded-full h-2">
+                                                <div class="bg-red-500 h-2 rounded-full" style="width: 63%" data-mock="true"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                                
+                                <button class="mt-4 text-primary-600 hover:text-primary-700 text-sm font-medium" data-event="click:handleRetakeAssessment">
+                                    <i class="fas fa-redo mr-1"></i>
+                                    Retake Assessment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- @END_COMPONENT: ATRQSection -->
+
+                <!-- Portfolio Table Section -->
+                <!-- @COMPONENT: PortfolioTableSection -->
+                <section class="mb-8">
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200">
+                        <div class="p-6 border-b border-slate-200">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                                <h2 class="text-2xl font-semibold text-slate-800">Portfolio Management</h2>
+                                
+                                <!-- Search and Filter Controls -->
+                                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                                    <div class="relative">
+                                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Search portfolios..." 
+                                            class="pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm w-full sm:w-64"
+                                            data-event="input:handleSearch"
+                                        />
+                                    </div>
+                                    <button 
+                                        id="suitabilityMonitorBtn"
+                                        class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+                                        data-event="click:openSuitabilityMonitor"
+                                    >
+                                        <i class="fas fa-chart-bar"></i>
+                                        <span>Suitability Monitor</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Portfolio Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-slate-50 border-b border-slate-200">
+                                    <tr>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">
+                                            <div class="flex items-center space-x-2">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                                                    data-event="change:handleSelectAll"
+                                                />
+                                                <span>Portfolio Name</span>
+                                            </div>
+                                        </th>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">Type</th>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">Value</th>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">Performance</th>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">Risk Level</th>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">Last Updated</th>
+                                        <th class="text-left py-3 px-6 text-sm font-semibold text-slate-700">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <!-- @MAP: portfolios.map(portfolio => ( -->
+                                    <tr class="hover:bg-slate-50 transition-colors" data-mock="true">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-3">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                                                    data-event="change:handleSelectPortfolio"
+                                                    data-bind="portfolio.id"
+                                                />
+                                                <div>
+                                                    <div class="font-medium text-slate-800" data-bind="portfolio.name">Conservative Growth Fund</div>
+                                                    <div class="text-sm text-slate-500" data-bind="portfolio.id">PF-001</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800" data-bind="portfolio.type">
+                                                Mutual Fund
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 font-medium text-slate-800" data-bind="portfolio.value" data-mock="true">$450,200</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-emerald-600 font-medium" data-bind="portfolio.performance" data-mock="true">+8.7%</span>
+                                                <i class="fas fa-arrow-up text-emerald-500 text-xs"></i>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800" data-bind="portfolio.riskLevel" data-mock="true">
+                                                Medium
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-sm text-slate-600" data-bind="portfolio.lastUpdated" data-mock="true">2 hours ago</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-2">
+                                                <button class="text-primary-600 hover:text-primary-700 text-sm" data-event="click:viewPortfolio">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="text-slate-600 hover:text-slate-700 text-sm" data-event="click:editPortfolio">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-slate-50 transition-colors" data-mock="true">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-3">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                                                    data-event="change:handleSelectPortfolio"
+                                                />
+                                                <div>
+                                                    <div class="font-medium text-slate-800" data-mock="true">Aggressive Growth Portfolio</div>
+                                                    <div class="text-sm text-slate-500" data-mock="true">PF-002</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800" data-mock="true">
+                                                ETF Portfolio
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 font-medium text-slate-800" data-mock="true">$1,250,800</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-emerald-600 font-medium" data-mock="true">+15.2%</span>
+                                                <i class="fas fa-arrow-up text-emerald-500 text-xs"></i>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800" data-mock="true">
+                                                High
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-sm text-slate-600" data-mock="true">1 hour ago</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-2">
+                                                <button class="text-primary-600 hover:text-primary-700 text-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="text-slate-600 hover:text-slate-700 text-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-slate-50 transition-colors" data-mock="true">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-3">
+                                                <input 
+                                                    type="checkbox" 
+                                                    class="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                                                    data-event="change:handleSelectPortfolio"
+                                                />
+                                                <div>
+                                                    <div class="font-medium text-slate-800" data-mock="true">Balanced Income Fund</div>
+                                                    <div class="text-sm text-slate-500" data-mock="true">PF-003</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800" data-mock="true">
+                                                Bond Fund
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 font-medium text-slate-800" data-mock="true">$750,500</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-emerald-600 font-medium" data-mock="true">+4.1%</span>
+                                                <i class="fas fa-arrow-up text-emerald-500 text-xs"></i>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800" data-mock="true">
+                                                Low
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-sm text-slate-600" data-mock="true">3 hours ago</td>
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center space-x-2">
+                                                <button class="text-primary-600 hover:text-primary-700 text-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="text-slate-600 hover:text-slate-700 text-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- @END_MAP )) -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Table Footer -->
+                        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50">
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-slate-600">
+                                    <span data-bind="selectedCount" data-mock="true">0</span> of <span data-bind="totalCount" data-mock="true">3</span> portfolios selected
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm text-slate-600">Rows per page:</span>
+                                    <select class="border border-slate-300 rounded px-2 py-1 text-sm">
+                                        <option>10</option>
+                                        <option>25</option>
+                                        <option>50</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- @END_COMPONENT: PortfolioTableSection -->
+            </div>
+
+            <!-- Suitability Monitor View -->
+            <div id="suitabilityMonitorView" class="hidden">
+                <!-- @COMPONENT: SuitabilityMonitorPage -->
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200">
+                    <div class="p-6 border-b border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <button id="backToDashboard" class="text-slate-600 hover:text-slate-800 transition-colors" data-event="click:backToDashboard">
+                                    <i class="fas fa-arrow-left text-lg"></i>
+                                </button>
+                                <h2 class="text-2xl font-semibold text-slate-800">Suitability Monitor Configuration</h2>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <button class="px-4 py-2 text-slate-600 hover:text-slate-800 border border-slate-300 rounded-lg transition-colors">
+                                    Reset to Default
+                                </button>
+                                <button class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+                                    Save Configuration
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Customization Fields -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-800 mb-4">Monitoring Fields</h3>
+                                <div class="space-y-4">
+                                    <!-- @MAP: monitoringFields.map(field => ( -->
+                                    <div class="border border-slate-200 rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <label class="flex items-center space-x-3">
+                                                <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" checked data-mock="true">
+                                                <span class="font-medium text-slate-700" data-mock="true">Portfolio Allocation Drift</span>
+                                            </label>
+                                            <button class="text-slate-400 hover:text-slate-600">
+                                                <i class="fas fa-cog text-sm"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3 text-sm">
+                                            <div>
+                                                <label class="block text-slate-600 mb-1">Threshold (%)</label>
+                                                <input type="number" value="5" class="w-full border border-slate-300 rounded px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent" data-mock="true">
+                                            </div>
+                                            <div>
+                                                <label class="block text-slate-600 mb-1">Alert Level</label>
+                                                <select class="w-full border border-slate-300 rounded px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent" data-mock="true">
+                                                    <option>Warning</option>
+                                                    <option>Critical</option>
+                                                    <option>Info</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-slate-200 rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <label class="flex items-center space-x-3">
+                                                <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" checked data-mock="true">
+                                                <span class="font-medium text-slate-700" data-mock="true">Risk Profile Mismatch</span>
+                                            </label>
+                                            <button class="text-slate-400 hover:text-slate-600">
+                                                <i class="fas fa-cog text-sm"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3 text-sm">
+                                            <div>
+                                                <label class="block text-slate-600 mb-1">Tolerance</label>
+                                                <input type="number" value="1.5" step="0.1" class="w-full border border-slate-300 rounded px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent" data-mock="true">
+                                            </div>
+                                            <div>
+                                                <label class="block text-slate-600 mb-1">Alert Level</label>
+                                                <select class="w-full border border-slate-300 rounded px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent" data-mock="true">
+                                                    <option>Critical</option>
+                                                    <option>Warning</option>
+                                                    <option>Info</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-slate-200 rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <label class="flex items-center space-x-3">
+                                                <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" data-mock="true">
+                                                <span class="font-medium text-slate-700" data-mock="true">Concentration Risk</span>
+                                            </label>
+                                            <button class="text-slate-400 hover:text-slate-600">
+                                                <i class="fas fa-cog text-sm"></i>
+                                            </button>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3 text-sm">
+                                            <div>
+                                                <label class="block text-slate-600 mb-1">Max Position (%)</label>
+                                                <input type="number" value="20" class="w-full border border-slate-300 rounded px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent" data-mock="true">
+                                            </div>
+                                            <div>
+                                                <label class="block text-slate-600 mb-1">Alert Level</label>
+                                                <select class="w-full border border-slate-300 rounded px-3 py-1 focus:ring-2 focus:ring-primary-500 focus:border-transparent" data-mock="true">
+                                                    <option>Warning</option>
+                                                    <option>Critical</option>
+                                                    <option>Info</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                                
+                                <button class="mt-4 text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center space-x-2">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Add Custom Field</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Rules Configuration -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-800 mb-4">Monitoring Rules</h3>
+                                <div class="space-y-4">
+                                    <!-- @MAP: monitoringRules.map(rule => ( -->
+                                    <div class="border border-slate-200 rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="font-medium text-slate-700" data-mock="true">Rule #1</span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800" data-mock="true">
+                                                    Active
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="text-slate-400 hover:text-slate-600">
+                                                    <i class="fas fa-edit text-sm"></i>
+                                                </button>
+                                                <button class="text-slate-400 hover:text-red-600">
+                                                    <i class="fas fa-trash text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="bg-slate-50 rounded p-3 text-sm">
+                                            <div class="font-medium text-slate-700 mb-1" data-mock="true">IF Portfolio Allocation Drift > 5%</div>
+                                            <div class="text-slate-600" data-mock="true">AND Risk Score Mismatch > 1.5</div>
+                                            <div class="text-slate-600 mt-2">
+                                                <span class="text-amber-600 font-medium">THEN</span> Generate Warning Alert
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-slate-200 rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="font-medium text-slate-700" data-mock="true">Rule #2</span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800" data-mock="true">
+                                                    Inactive
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="text-slate-400 hover:text-slate-600">
+                                                    <i class="fas fa-edit text-sm"></i>
+                                                </button>
+                                                <button class="text-slate-400 hover:text-red-600">
+                                                    <i class="fas fa-trash text-sm"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="bg-slate-50 rounded p-3 text-sm">
+                                            <div class="font-medium text-slate-700 mb-1" data-mock="true">IF Concentration Risk > 20%</div>
+                                            <div class="text-slate-600 mt-2">
+                                                <span class="text-red-600 font-medium">THEN</span> Generate Critical Alert
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                                
+                                <button class="mt-4 text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center space-x-2">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Create New Rule</span>
+                                </button>
+                                
+                                <!-- Alert Settings -->
+                                <div class="mt-8">
+                                    <h4 class="text-md font-semibold text-slate-800 mb-4">Alert Settings</h4>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center space-x-3">
+                                            <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" checked data-mock="true">
+                                            <span class="text-slate-700">Email notifications</span>
+                                        </label>
+                                        <label class="flex items-center space-x-3">
+                                            <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" data-mock="true">
+                                            <span class="text-slate-700">SMS notifications</span>
+                                        </label>
+                                        <label class="flex items-center space-x-3">
+                                            <input type="checkbox" class="rounded border-slate-300 text-primary-600 focus:ring-primary-500" checked data-mock="true">
+                                            <span class="text-slate-700">Dashboard alerts</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: SuitabilityMonitorPage -->
+            </div>
+        </main>
+    </div>
+    <!-- @END_COMPONENT: DashboardLayout -->
+
+    <script>
+        (function() {
+            // TODO: Implement business logic, API calls, and state management
+            
+            const dashboardView = document.getElementById('dashboardView');
+            const suitabilityMonitorView = document.getElementById('suitabilityMonitorView');
+            const suitabilityMonitorBtn = document.getElementById('suitabilityMonitorBtn');
+            const backToDashboardBtn = document.getElementById('backToDashboard');
+
+            // Navigation between views
+            suitabilityMonitorBtn.addEventListener('click', function() {
+                dashboardView.classList.add('hidden');
+                suitabilityMonitorView.classList.remove('hidden');
+            });
+
+            backToDashboardBtn.addEventListener('click', function() {
+                suitabilityMonitorView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+            });
+
+            // TODO: Implement portfolio search functionality
+            // TODO: Implement multi-select portfolio functionality
+            // TODO: Implement ATRQ data fetching and display
+            // TODO: Implement goals data retrieval from database
+            // TODO: Implement suitability monitor rules engine
+            // TODO: Implement form validation and data persistence
+        })();
+    </script>
+</body>
+</html>
