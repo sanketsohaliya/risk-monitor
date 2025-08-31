@@ -8,6 +8,7 @@ import SuitabilityMonitor from "@/pages/suitability-monitor";
 import PortfolioSummary from "@/pages/portfolio-summary";
 import AISummary from "@/pages/ai-summary";
 import NotFound from "@/pages/not-found";
+import ThemeProvider from "@/components/theme-provider";
 
 function Router() {
   return (
@@ -24,10 +25,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

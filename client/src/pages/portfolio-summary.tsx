@@ -247,13 +247,13 @@ export default function PortfolioSummary() {
                             Monitoring Field: {getMonitoringFieldName(breach.monitoringFieldId)}
                           </p>
                         </div>
-                        
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
-                          <p className="text-sm font-medium text-red-800 mb-1">Breach Condition:</p>
-                          <p className="text-sm text-red-700" data-testid={`text-breach-condition-${breach.id}`}>
+
+                        <div className="bg-red-50 border dark:bg-blue-50 dark:text-gray-50 dark:border-0 border-red-200 rounded-lg p-3 mb-3">
+                          <p className="text-sm font-medium mb-1">Breach Condition:</p>
+                          <p className="text-sm" data-testid={`text-breach-condition-${breach.id}`}>
                             {breach.breachCondition}
                           </p>
-                          <p className="text-xs text-red-600 mt-1" data-testid={`text-breach-value-${breach.id}`}>
+                          <p className="text-sm" data-testid={`text-breach-value-${breach.id}`}>
                             Detected value: {breach.breachValue}
                           </p>
                         </div>

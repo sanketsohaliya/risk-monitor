@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User, Portfolio, Goal, AtrqResult } from "@shared/schema";
+import ModeToggle from "@/components/mode-toggle";
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
@@ -122,6 +123,7 @@ export default function Dashboard() {
               <Button variant="ghost" size="sm" className="text-white hover:bg-white/10" data-testid="button-settings">
                 <SettingsIcon size={16} />
               </Button>
+              <ModeToggle className="text-white hover:bg-white/10"/>
             </div>
           </div>
         </div>

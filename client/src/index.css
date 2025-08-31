@@ -109,29 +109,95 @@
   }
 }
 
-/* Custom teal theme utilities */
+/* Custom utilities and dark-mode inversions */
 @layer utilities {
+  /* Invert common backgrounds in dark mode */
+  .dark .bg-white { background-color: hsl(228 9.8% 10%) !important; }
+  .dark .bg-slate-50 { background-color: hsl(222 47% 12%) !important; }
+  .dark .bg-slate-100 { background-color: hsl(222 47% 14%) !important; }
+  .dark .bg-slate-200 { background-color: hsl(222 22% 18%) !important; }
+  .dark .bg-gray-50 { background-color: hsl(222 47% 12%) !important; }
+  .dark .bg-blue-50 { background-color: hsl(217 40% 18%) !important; }
+  .dark .bg-emerald-50 { background-color: hsl(160 30% 18%) !important; }
+  .dark .bg-amber-50 { background-color: hsl(38 35% 18%) !important; }
+  .dark .bg-primary-100 { background-color: hsl(186 40% 18%) !important; }
+  .dark .bg-emerald-100 { background-color: hsl(160 35% 20%) !important; }
+  .dark .bg-amber-100 { background-color: hsl(38 40% 20%) !important; }
+  .dark .bg-red-100 { background-color: hsl(0 45% 20%) !important; }
+  .dark .bg-slate-100 { background-color: hsl(222 47% 14%) !important; }
+
+  /* Invert common text shades */
+  .dark .text-slate-900,
+  .dark .text-slate-800 { color: hsl(210 40% 96%) !important; }
+  .dark .text-slate-700 { color: hsl(220 17% 92%) !important; }
+  .dark .text-slate-600 { color: hsl(215 20% 82%) !important; }
+  .dark .text-slate-500 { color: hsl(215 15% 70%) !important; }
+  .dark .text-emerald-800 { color: hsl(160 60% 70%) !important; }
+  .dark .text-emerald-600 { color: hsl(160 55% 65%) !important; }
+  .dark .text-amber-800 { color: hsl(38 70% 70%) !important; }
+  .dark .text-amber-600 { color: hsl(38 65% 65%) !important; }
+  .dark .text-red-800 { color: hsl(0 70% 70%) !important; }
+  .dark .text-primary-800 { color: hsl(186 80% 70%) !important; }
+  .dark .text-primary-100 { color: hsl(186 60% 75%) !important; }
+
+  /* Invert common border shades */
+  .dark .border-slate-100,
+  .dark .border-slate-200,
+  .dark .border-slate-300 { border-color: hsl(210 5% 26%) !important; }
+  .dark .border-primary-100 { border-color: hsl(186 40% 26%) !important; }
+  .dark .border-teal-600 { border-color: hsl(186 70% 35%) !important; }
+
+  /* Gradient stop overrides (used by dashboard cards) */
+  .dark .from-primary-50 {
+    --tw-gradient-from: hsl(186 40% 20%) var(--tw-gradient-from-position);
+    --tw-gradient-to: hsl(186 40% 20% / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .dark .to-blue-50 { --tw-gradient-to: hsl(217 40% 22%) var(--tw-gradient-to-position); }
+  .dark .from-primary-600 { --tw-gradient-from: hsl(186 70% 36%) var(--tw-gradient-from-position); }
+  .dark .to-primary-700 { --tw-gradient-to: hsl(186 70% 28%) var(--tw-gradient-to-position); }
+
+  .dark .from-emerald-50 {
+    --tw-gradient-from: hsl(160 35% 20%) var(--tw-gradient-from-position);
+    --tw-gradient-to: hsl(160 35% 20% / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .dark .to-green-50 { --tw-gradient-to: hsl(140 30% 20%) var(--tw-gradient-to-position); }
+
+  .dark .from-amber-50 {
+    --tw-gradient-from: hsl(38 40% 20%) var(--tw-gradient-from-position);
+    --tw-gradient-to: hsl(38 40% 20% / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .dark .to-yellow-50 { --tw-gradient-to: hsl(50 35% 22%) var(--tw-gradient-to-position); }
+
+  .dark .from-slate-50 {
+    --tw-gradient-from: hsl(222 47% 12%) var(--tw-gradient-from-position);
+    --tw-gradient-to: hsl(222 47% 12% / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .dark .to-gray-50 { --tw-gradient-to: hsl(215 20% 20%) var(--tw-gradient-to-position); }
+
+  /* Brand teal utilities + dark variants */
   .bg-teal-gradient {
     background: linear-gradient(135deg, hsl(186 100% 38%) 0%, hsl(186 85% 30%) 100%);
   }
-  
-  .bg-teal-header {
-    background: hsl(186 100% 38%);
+  .dark .bg-teal-gradient {
+    background: linear-gradient(135deg, hsl(186 90% 38%) 0%, hsl(186 70% 24%) 100%);
   }
   
-  .text-teal {
-    color: hsl(186 100% 38%);
-  }
+  .bg-teal-header { background: hsl(186 100% 38%); }
+  .dark .bg-teal-header { background: hsl(186 80% 30%); }
   
-  .border-teal {
-    border-color: hsl(186 100% 38%);
-  }
+  .text-teal { color: hsl(186 100% 38%); }
+  .dark .text-teal { color: hsl(186 100% 62%); }
   
-  .hover\:bg-teal-50:hover {
-    background-color: hsl(186 100% 97%);
-  }
+  .border-teal { border-color: hsl(186 100% 38%); }
+  .dark .border-teal { border-color: hsl(186 80% 40%); }
   
-  .bg-teal-50 {
-    background-color: hsl(186 100% 97%);
-  }
+  .hover\:bg-teal-50:hover { background-color: hsl(186 100% 97%); }
+  .dark .hover\:bg-teal-50:hover { background-color: hsl(186 40% 18%); }
+  
+  .bg-teal-50 { background-color: hsl(186 100% 97%); }
+  .dark .bg-teal-50 { background-color: hsl(186 35% 16%); }
 }
